@@ -10,13 +10,13 @@ Discordに投稿されることを目的としていますが、多分Slackで�
 
 https://note.com/tokifujp/n/na20b8b954e50
 
-それぞれ以下の表の通り設定してください。
+環境変数を以下の表の通り設定してください。
 
 |  環境変数名  |  設定すべき値  |
 | ---- | ---- |
 |  es_access_token  |  下記参照  |
 |  webhook_url  |  Webhook URL  |
-|  owner_id  |  Discordの自分のid(エラー時にメンションされます。)  |
+|  owner_id  |  Discordの自分のid(エラー時にメンションされます。(WIP))  |
 ## スタディサプリEnglish tokenについて
 スタディサプリEnglishをリロードしたときにDeveloperToolでapiを見ると、``homeworks``というxhrリクエストが飛んでいて、そこに``authorization``から始まる列があるのでそこの``JWT jwt_token=``から``,jwt_version="1"``までをコピーして、環境変数へ入れてください。
 ## 使い方

@@ -18,6 +18,6 @@ https://note.com/tokifujp/n/na20b8b954e50
 |  webhook_url  |  Webhook URL  |
 |  owner_id  |  Discordの自分のid(エラー時にメンションされます。)  |
 ## スタディサプリEnglish tokenについて
-スタディサプリEnglishをリロードしたときにDeveloperToolでapiを見ると、``authorization``から始まる列があるのでそこの``JWT jwt_token=``から``,jwt_version="1"``までをコピーして、環境変数へ入れてください。
+スタディサプリEnglishをリロードしたときにDeveloperToolでapiを見ると、``homeworks``というxhrリクエストが飛んでいて、そこに``authorization``から始まる列があるのでそこの``JWT jwt_token=``から``,jwt_version="1"``までをコピーして、環境変数へ入れてください。
 ## 使い方
 GASに入れて環境変数を設定すればすぐ使えると思います。

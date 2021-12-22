@@ -1,5 +1,5 @@
 # StudySapuri-English-Notify
-スタディサプリEnglishで出ている宿題をGASで取得してWebhookに流すやーつ
+スタディサプリEnglishで出ている宿題をGASで取得してWebhookに流すやつ
 ## 実行環境
 Google Apps Scriptのデフォルトで動きます。
 

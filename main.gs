@@ -1,14 +1,14 @@
+// 環境変数からの読み込み
+var es_access_token = PropertiesService.getScriptProperties().getProperty("es_access_token");
+var webhook = PropertiesService.getScriptProperties().getProperty("webhook_url");
+var owner = PropertiesService.getScriptProperties().getProperty("owner");
+// var message = ""
+// Webhook設定
+var username = "スタディサプリEnglishお知らせbot_Staging"
+var colorCode = parseInt("1C80E7", 16);
+
+
 function myFunction() {
-  // 環境変数からの読み込み
-  var es_access_token = PropertiesService.getScriptProperties().getProperty("es_access_token");
-  var webhook = PropertiesService.getScriptProperties().getProperty("webhook_url");
-  var owner = PropertiesService.getScriptProperties().getProperty("owner");
-
-  // Webhook設定
-  var username = "スタディサプリEnglishお知らせbot"
-  var colorCode = parseInt("1C80E7", 16);
-  var message = ""
-
   // Webhook設定2
   header = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36',
@@ -26,55 +26,46 @@ function myFunction() {
   var code = response.getResponseCode();
   var esapijson = JSON.parse(response);
   if(code == 200){
-    //console.log("リクエストが成功しました。");
       var esapijson_count = Object.keys(esapijson.items).length
-      var eshwarray = [];
-      //var j = 0
+      var message_content = [];
       for (let i = 0; i < esapijson_count; i++) {
-        //console.log("現在jsonパース" + (i+1) + "回目の処理です。");
         var esapijson_hw = esapijson.items[i];
         var esapi_endtime = Utilities.formatDate(new Date(esapijson_hw.endAt), 'Asia/Tokyo', 'yyyy/MM/dd/HH:mm:ss');
         if(esapijson_hw.isOpened == 1){
-          // var j = j+1;
-          eshwarray.push({"name": "課題名", "value": esapijson_hw.name, "inline": true}, {"name": "先生", "value": esapijson_hw.creatorName, "inline": true }, {"name": "課題締め切り", "value": esapi_endtime, "inline": true });
+          message_content.push({"name": "課題名", "value": esapijson_hw.name, "inline": true}, {"name": "先生", "value": esapijson_hw.creatorName, "inline": true }, {"name": "課題締め切り", "value": esapi_endtime, "inline": true });
         }
       }
-      if(eshwarray == ""){
-        eshwarray.push({"name": "課題名", "value": "なし", "inline": true}, {"name": "先生", "value": "なし", "inline": true }, {"name": "課題締め切り", "value": "なし", "inline": true });
-        //break;
+      if(message_content == ""){
+        return 0;
       }
-    var message = {
-      "username": username,
-      "tts": false,
-      "embeds": [
-        {
-          "title": "スタディサプリEnglish課題お知らせ", 
-          "color": colorCode,
-          "fields": eshwarray,
-          "footer": {
-            "text": "https://github.com/Threebents/StudySapuri-English-Notify",
-            "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
-          }
-        }
-      ]
-    }
   }else if(code == 401){
     console.log("権限がありません。");
-    console.log(ownerid)
-    var message = {
-      "username": username,
-      "content": "\@"+owner+" 、トークンの有効期限が切れました。コード401",
-      "tts": false
-    }
+    var message_content = ([{"name": "トークンの有効期限が切れました。", "value": "コード"+code}])
   }else{
-    console.log("不明なエラーが発生しました。");
-    var message = {
-      "username": username,
-      "content": "\@"+owner+"、不明なエラーが発生しました。コード"+code,
-      "tts": false
-    }
+    console.log("不明なエラーが発生しました。"+code);
+    var message_content = ([{"name": "不明なエラーが発生しました。", "value": "コード"+code}])
   }
 
+  sendDiscord(message_content)
+}
+
+function sendDiscord(message_content){
+  //メッセージコンテンツ
+    var message = {
+    "username": username,
+    "tts": false,
+    "embeds": [
+      {
+        "title": "スタディサプリEnglish課題お知らせ", 
+        "color": colorCode,
+        "fields": message_content,
+        "footer": {
+          "text": "https://github.com/Threebents/StudySapuri-English-Notify",
+          "icon_url": "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+        }
+      }
+    ]
+  }
   //送信
   const param = {
     "method": "POST",
